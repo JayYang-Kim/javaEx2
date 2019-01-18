@@ -12,15 +12,19 @@ public class EmployeeDAO {
 	private Connection conn = DBConn.getConnection();
 	
 	public int insertEmployee(EmployeeDTO dto) {
-		int result=0;
+		int result = 0; // result는 성공, 실패의 결과를 간단하게 표현하기 위해 executeUpdate 반환값을 받아서 처리
 		PreparedStatement pstmt = null;
 		String sql;
 
 		try {
 			sql = "INSERT INTO employee(sabeon, name, birth, tel) VALUES(?, ?, ?, ?)";
 			
+			// String을 두줄로 처리하여 += 해서 처리하면 속도가 떨어짐 꼭 두줄로 하고싶은 경우 한줄내에서 (+) 연산자를 사용하여 추가하는게 속도가 빠름
+			//sql = "INSERT INTO employee(sabeon, name, birth, tel) " + "VALUES(?, ?, ?, ?)";
+			
 			pstmt = conn.prepareStatement(sql);
 			
+			// Oracle에서 Index가 1부터 시작이기 때문에 1로 시작
 			pstmt.setString(1, dto.getSabeon());
 			pstmt.setString(2, dto.getName());
 			pstmt.setString(3, dto.getBirth());
@@ -94,6 +98,7 @@ public class EmployeeDAO {
 				dto.setSabeon(rs.getString("sabeon"));
 				dto.setName(rs.getString("name"));
 				dto.setBirth(rs.getString("birth"));
+				//dto.setBirth(rs.getDate("birth").toString()); // date자료형으로 받고나서 toString()을 하면 'YYYY-MM-DD'형식으로 출력된다.
 				dto.setTel(rs.getString("tel"));
 			}
 		} catch (Exception e) {
