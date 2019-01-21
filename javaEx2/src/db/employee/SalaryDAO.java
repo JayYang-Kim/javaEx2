@@ -3,6 +3,7 @@ package db.employee;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -151,11 +152,113 @@ public class SalaryDAO {
 	public List<SalaryDTO> listSalary(String payDate) {
 		List<SalaryDTO> list=new ArrayList<>();
 		
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		StringBuffer sb=new StringBuffer();
+		
+		try {
+			sb.append("SELECT salaryNum, s.sabeon, name, payDate");
+			sb.append("  , TO_CHAR(paymentDate, 'YYYY-MM-DD') paymentDate");
+			sb.append("  , pay, sudang, pay+sudang tot, tax, (pay+sudang)-tax afterPay, memo ");
+			sb.append("  FROM salary s");
+			sb.append("  JOIN employee e ON s.sabeon = e.sabeon ");
+			sb.append("  WHERE payDate = ?");
+			
+			pstmt=conn.prepareStatement(sb.toString());
+			pstmt.setString(1, payDate);
+			rs=pstmt.executeQuery();
+			
+			while(rs.next()) {
+				SalaryDTO dto = new SalaryDTO();
+				dto.setSalaryNum(rs.getInt("salaryNum"));
+				dto.setSabeon(rs.getString("sabeon"));
+				dto.setName(rs.getString("name"));
+				dto.setPayDate(rs.getString("payDate"));
+				dto.setPaymentDate(rs.getString("paymentDate"));
+				dto.setPay(rs.getInt("pay"));
+				dto.setSudang(rs.getInt("sudang"));
+				dto.setTot(rs.getInt("tot"));
+				dto.setTax(rs.getInt("tax"));
+				dto.setAfterPay(rs.getInt("afterPay"));
+				dto.setMemo(rs.getString("memo"));
+				
+				list.add(dto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		
 		return list;
 	}
 	
 	public List<SalaryDTO> listSalary(Map<String, Object> map) {
 		List<SalaryDTO> list=new ArrayList<>();
+		
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		StringBuffer sb=new StringBuffer();
+		
+		String sabeon=(String)map.get("sabeon");
+		String payDate=(String)map.get("payDate");
+		
+		try {
+			sb.append("SELECT salaryNum, s.sabeon, name, payDate");
+			sb.append("  , TO_CHAR(paymentDate, 'YYYY-MM-DD') paymentDate");
+			sb.append("  , pay, sudang, pay+sudang tot, tax, (pay+sudang)-tax afterPay, memo ");
+			sb.append("  FROM salary s");
+			sb.append("  JOIN employee e ON s.sabeon = e.sabeon ");
+			sb.append("  WHERE s.sabeon = ? AND payDate = ?");
+			
+			pstmt=conn.prepareStatement(sb.toString());
+			pstmt.setString(1, sabeon);
+			pstmt.setString(2, payDate);
+			rs=pstmt.executeQuery();
+			
+			while(rs.next()) {
+				SalaryDTO dto = new SalaryDTO();
+				dto.setSalaryNum(rs.getInt("salaryNum"));
+				dto.setSabeon(rs.getString("sabeon"));
+				dto.setName(rs.getString("name"));
+				dto.setPayDate(rs.getString("payDate"));
+				dto.setPaymentDate(rs.getString("paymentDate"));
+				dto.setPay(rs.getInt("pay"));
+				dto.setSudang(rs.getInt("sudang"));
+				dto.setTot(rs.getInt("tot"));
+				dto.setTax(rs.getInt("tax"));
+				dto.setAfterPay(rs.getInt("afterPay"));
+				dto.setMemo(rs.getString("memo"));
+				
+				list.add(dto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
 		
 		return list;
 	}
@@ -163,6 +266,53 @@ public class SalaryDAO {
 	public List<SalaryDTO> listSalary() {
 		List<SalaryDTO> list=new ArrayList<>();
 		
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		StringBuffer sb=new StringBuffer();
+		
+		try {
+			sb.append("SELECT salaryNum, s.sabeon, name, payDate");
+			sb.append("  , TO_CHAR(paymentDate, 'YYYY-MM-DD') paymentDate");
+			sb.append("  , pay, sudang, pay+sudang tot, tax, (pay+sudang)-tax afterPay, memo ");
+			sb.append("  FROM salary s");
+			sb.append("  JOIN employee e ON s.sabeon = e.sabeon ");
+			sb.append("  ORDER BY payDate DESC ");
+			
+			pstmt=conn.prepareStatement(sb.toString());
+			rs=pstmt.executeQuery();
+			
+			while(rs.next()) {
+				SalaryDTO dto = new SalaryDTO();
+				dto.setSalaryNum(rs.getInt("salaryNum"));
+				dto.setSabeon(rs.getString("sabeon"));
+				dto.setName(rs.getString("name"));
+				dto.setPayDate(rs.getString("payDate"));
+				dto.setPaymentDate(rs.getString("paymentDate"));
+				dto.setPay(rs.getInt("pay"));
+				dto.setSudang(rs.getInt("sudang"));
+				dto.setTot(rs.getInt("tot"));
+				dto.setTax(rs.getInt("tax"));
+				dto.setAfterPay(rs.getInt("afterPay"));
+				dto.setMemo(rs.getString("memo"));
+				
+				list.add(dto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
 		
 		return list;
 	}
