@@ -16,7 +16,7 @@ public class Test10 {
 		FileInputStream fis = null;
 		FileOutputStream fos = null;
 		
-		byte []b = new byte[1024];
+		byte []b = new byte[1024]; // byte[1024] or byte[2048]
 		int len;
 		
 		try {
@@ -26,8 +26,8 @@ public class Test10 {
 			System.out.println("복사할 파일명?");
 			target = br.readLine();
 			
-			fis = new FileInputStream(source);
-			fos = new FileOutputStream(target);
+			fis = new FileInputStream(source); // 파일이 없을 경우, FileNotFoundException 발생
+			fos = new FileOutputStream(target); // 없으면 만들고, 있으면 지우고 만듬
 			
 			long start = System.currentTimeMillis();
 			
@@ -36,7 +36,7 @@ public class Test10 {
 			}*/
 			
 			// 위의 소스와 동일
-			while ((len = fis.read(b)) != -1) {
+			while ((len = fis.read(b)) != -1) { // return값은 실제로 읽은 길이를 반환
 				fos.write(b, 0, len);
 			}
 			
