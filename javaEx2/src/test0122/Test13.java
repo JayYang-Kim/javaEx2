@@ -9,7 +9,7 @@ public class Test13 {
 	public static void main(String[] args) {
 		try {
 			File f= File.createTempFile("test", "tmp"); // 임시파일 생성
-			f.deleteOnExit(); // 프로그램이 존재하면 삭제
+			f.deleteOnExit(); // 프로그램이 종료하면 삭제
 			
 			FileOutputStream fos = new FileOutputStream(f);
 			
