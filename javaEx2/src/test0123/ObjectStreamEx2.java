@@ -6,13 +6,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Map;
 
+// 직렬화 대상에서 제외 : transient 멤버변수, 메소드, 생성자, static 멤버 변수
+// serialVersionUID : 직렬화에 사용되는 고유 아이디로, 선언하지 않으면 JVM에서 디폴트로 자동 생성된다.
+// JAVA에서는 명시적으로 serialVersionUID를 선언할 것을 적극 권장하고 있다.
 class UserVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
-	private String tel;
+	private transient String tel;
 	private int age;
 	
 	public UserVO() {
